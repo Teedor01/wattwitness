@@ -16,8 +16,6 @@ import {
 import { eligibleInput, mulberry32 } from "../fixtures";
 import { deployCompat, type CompatEvm } from "../helpers/evm";
 
-
-
 let evm: CompatEvm;
 beforeAll(async () => {
   evm = await deployCompat();
@@ -126,8 +124,6 @@ describe("observation leaves and Merkle pair hashing", () => {
     for (const set of vectors.merkle) {
       const leaves = set.leaves as Hex32[];
       expect(lower(merkleRoot(leaves))).toBe(lower(set.root));
-
-      
       let layer = [...leaves].sort((a, b) => (BigInt(a) < BigInt(b) ? -1 : BigInt(a) > BigInt(b) ? 1 : 0));
       while (layer.length > 1) {
         const next: Hex32[] = [];

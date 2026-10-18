@@ -94,10 +94,9 @@ describe("other ablation kinds", () => {
   it("exclude_below_confidence removes weak evidence and can only raise the confidence bar", () => {
     const observations = eligibleInput().observations.map((o) => (o.sourceId === "devB" ? { ...o, confidenceMilli: 750 } : o));
     const input = eligibleInput({ observations });
-    expect(evaluateClaim(input).state).toBe("ELIGIBLE"); // 750 >= default 700
+    expect(evaluateClaim(input).state).toBe("ELIGIBLE");
     const r = runAblation(input, [{ kind: "exclude_below_confidence", minConfidenceMilli: 800 }]);
     expect(r.stateAfter).toBe("OBSERVED");
-    // a lower bar than the configured one must not weaken the rule
     const strict = eligibleInput({ observations, config: { minConfidenceMilli: 900 } });
     expect(evaluateClaim(strict).state).toBe("OBSERVED");
     expect(runAblation(strict, [{ kind: "exclude_below_confidence", minConfidenceMilli: 100 }]).after.config.minConfidenceMilli).toBe(900);

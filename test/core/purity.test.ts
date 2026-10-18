@@ -13,7 +13,7 @@ function code(file: string): string {
 describe("core is pure: no network, no clock, no randomness, no LLM", () => {
   it("scans the expected modules", () => {
     expect(files.sort()).toEqual(
-      ["ablation.ts", "baseline.ts", "bitmask.ts", "errors.ts", "evaluator.ts", "hash.ts", "impact.ts", "index.ts", "merkle.ts", "period.ts", "types.ts", "validate.ts"].sort(),
+      ["ablation.ts", "baseline.ts", "bitmask.ts", "errors.ts", "evaluator.ts", "hash.ts", "impact.ts", "index.ts", "merkle.ts", "period.ts", "registry.ts", "types.ts", "validate.ts"].sort(),
     );
   });
 
