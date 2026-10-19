@@ -12,12 +12,11 @@ export interface DayPeriod {
   endDay: number;
 }
 
-
 export interface Observation {
   siteId: Hex32;
   day: number;
   sourceId: string; 
-  controllerId: string;
+  controllerId: string; 
   runningMask: number;
   coverageMask: number;
   classifierVersion: string;

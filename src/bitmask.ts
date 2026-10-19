@@ -1,5 +1,6 @@
 import { FULL_DAY_MASK, HOURS_PER_DAY } from "./types";
 
+/** True iff mask is an integer using only bits 0..23. */
 export function isHourMask(mask: number): boolean {
   return Number.isInteger(mask) && mask >= 0 && mask <= FULL_DAY_MASK;
 }
@@ -14,6 +15,7 @@ export function popcount(mask: number): number {
   return n;
 }
 
+/** Hours (0..23) whose bit is set. Bits above 23 are ignored. */
 export function hoursOf(mask: number): number[] {
   const out: number[] = [];
   for (let h = 0; h < HOURS_PER_DAY; h++) if (((mask >>> h) & 1) === 1) out.push(h);
@@ -29,7 +31,6 @@ export function maskOfHours(hours: Iterable<number>): number {
   return m >>> 0;
 }
 
-/** Complement within the 24 hourly bits. */
 export function notMask(mask: number): number {
   return ~mask & FULL_DAY_MASK;
 }

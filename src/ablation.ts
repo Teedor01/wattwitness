@@ -3,8 +3,6 @@ import { evaluateClaim, type ClaimInput, type EvaluationResult, type ReasonCode 
 import { validateObservation } from "./validate";
 import type { EvidenceState, Hex32, Observation } from "./types";
 
-
-
 export type Ablation =
   | { kind: "remove_source"; sourceId: string }
   | { kind: "remove_controller"; controllerId: string }
@@ -25,7 +23,6 @@ export function describeAblation(a: Ablation): string {
       return `exclude observations with confidence below ${a.minConfidenceMilli}`;
   }
 }
-
 
 export function applyAblations(input: ClaimInput, ablations: readonly Ablation[]): ClaimInput {
   let observations: Observation[] = [...input.observations];
@@ -125,7 +122,6 @@ export function runAblation(
     after,
   };
 }
-
 
 export function sweepSources(input: ClaimInput, evaluate: Evaluator = evaluateClaim): AblationReport[] {
   const ids = [...new Set(input.observations.map((o) => o.sourceId))].sort();

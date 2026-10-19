@@ -9,3 +9,4 @@ export * from "./baseline";
 export * from "./evaluator";
 export * from "./impact";
 export * from "./ablation";
+export * from "./registry";

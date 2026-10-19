@@ -109,7 +109,6 @@ export function summarizePeriod(args: SummarizeArgs): PeriodSummary {
     }
   }
 
-  // 6. confidence
   const stage3: Observation[] = [];
   for (const o of stage2) {
     if (o.confidenceMilli < config.minConfidenceMilli) {
@@ -117,7 +116,6 @@ export function summarizePeriod(args: SummarizeArgs): PeriodSummary {
     } else stage3.push(o);
   }
 
-  // 7. one voice per controller per day (lowest sourceId wins, deterministically)
   const byControllerDay = new Map<string, Observation[]>();
   for (const o of stage3) {
     const key = `${o.controllerId}\u0000${o.day}`;
@@ -135,7 +133,6 @@ export function summarizePeriod(args: SummarizeArgs): PeriodSummary {
   }
   accepted.sort((a, b) => a.day - b.day || cmp(a.sourceId, b.sourceId));
 
-  // 8. per-hour quorum classification
   const days = period.endDay - period.startDay + 1;
   const acceptedByDay = new Map<number, Observation[]>();
   for (const o of accepted) {

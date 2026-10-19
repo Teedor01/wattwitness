@@ -46,7 +46,7 @@ export interface BuildBaselineArgs {
   observations: readonly Observation[];
   siteId: Hex32;
   claimType: Hex32;
-  period: DayPeriod; // baseline window
+  period: DayPeriod;
   classifierVersion: string;
   salt: Hex32;
   config?: Partial<EvaluationConfig>;
@@ -57,7 +57,6 @@ export interface BuiltBaseline {
   summary: PeriodSummary;
   exclusions: Exclusion[];
 }
-
 
 export function buildBaselinePackage(args: BuildBaselineArgs): BuiltBaseline {
   validatePeriod(args.period, "baseline period");
