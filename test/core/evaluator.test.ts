@@ -93,7 +93,7 @@ describe("evidence states", () => {
   });
 
   it("CORROBORATED but not ELIGIBLE: insufficient quorum coverage blocks eligibility", () => {
-    const half = maskOfHours([...Array(12).keys()]); 
+    const half = maskOfHours([...Array(12).keys()]);
     const observations = [
       ...dailyObservations(CLAIM_PERIOD, ONE_HOUR, [ctrl("devA", "ctrlA")]),
       ...dailyObservations(CLAIM_PERIOD, 0, [ctrl("devB", "ctrlB")]).map((o) => ({ ...o, coverageMask: half })),
@@ -167,7 +167,7 @@ describe("duplicate observations and replay", () => {
 
   it("conflicting duplicates from one source remove that source's voice for the day", () => {
     const base = eligibleInput();
-    const extra: Observation = obs({ day: 111, sourceId: "devB", controllerId: "ctrlB", runningMask: 0 }); 
+    const extra: Observation = obs({ day: 111, sourceId: "devB", controllerId: "ctrlB", runningMask: 0 }); // contradicts B's own day-111 report
     const r = evaluateClaim({ ...base, observations: [...base.observations, extra] });
     expect(r.exclusions.filter((e) => e.code === "CONFLICTING_DUPLICATE")).toHaveLength(2);
     expect(r.summary.perDay.find((d) => d.day === 111)?.underCovered).toBe(24);
@@ -295,7 +295,7 @@ describe("challenge freeze", () => {
 
 describe("uncertainty propagation", () => {
   const ninetyPercent = (): ClaimInput => {
-    const covers22 = (1 << 22) - 1; 
+    const covers22 = (1 << 22) - 1; // B listens hours 0..21
     const observations = [
       ...dailyObservations(CLAIM_PERIOD, ONE_HOUR, [ctrl("devA", "ctrlA")]),
       ...dailyObservations(CLAIM_PERIOD, ONE_HOUR, [ctrl("devB", "ctrlB")]).map((o) => ({ ...o, coverageMask: covers22 })),

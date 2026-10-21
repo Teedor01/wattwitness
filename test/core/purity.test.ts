@@ -1,10 +1,16 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 const SRC = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../src");
-const files = readdirSync(SRC).filter((f) => f.endsWith(".ts"));
+function walk(dir: string, prefix = ""): string[] {
+  return readdirSync(dir).flatMap((name) => {
+    const full = path.join(dir, name);
+    return statSync(full).isDirectory() ? walk(full, `${prefix}${name}/`) : name.endsWith(".ts") ? [`${prefix}${name}`] : [];
+  });
+}
+const files = walk(SRC);
 
 function code(file: string): string {
   return readFileSync(path.join(SRC, file), "utf8").replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:])\/\/.*$/gm, "$1");
@@ -13,7 +19,10 @@ function code(file: string): string {
 describe("core is pure: no network, no clock, no randomness, no LLM", () => {
   it("scans the expected modules", () => {
     expect(files.sort()).toEqual(
-      ["ablation.ts", "baseline.ts", "bitmask.ts", "errors.ts", "evaluator.ts", "hash.ts", "impact.ts", "index.ts", "merkle.ts", "period.ts", "registry.ts", "types.ts", "validate.ts"].sort(),
+      [
+        "ablation.ts", "baseline.ts", "bitmask.ts", "errors.ts", "evaluator.ts", "hash.ts", "impact.ts", "index.ts", "merkle.ts", "period.ts", "registry.ts", "types.ts", "validate.ts",
+        "sensing/attestation.ts", "sensing/classifier.ts", "sensing/dsp.ts", "sensing/features.ts", "sensing/wav.ts", "sync/queue.ts",
+      ].sort(),
     );
   });
 

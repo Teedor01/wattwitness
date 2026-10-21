@@ -94,7 +94,7 @@ describe("other ablation kinds", () => {
   it("exclude_below_confidence removes weak evidence and can only raise the confidence bar", () => {
     const observations = eligibleInput().observations.map((o) => (o.sourceId === "devB" ? { ...o, confidenceMilli: 750 } : o));
     const input = eligibleInput({ observations });
-    expect(evaluateClaim(input).state).toBe("ELIGIBLE");
+    expect(evaluateClaim(input).state).toBe("ELIGIBLE"); 
     const r = runAblation(input, [{ kind: "exclude_below_confidence", minConfidenceMilli: 800 }]);
     expect(r.stateAfter).toBe("OBSERVED");
     const strict = eligibleInput({ observations, config: { minConfidenceMilli: 900 } });
@@ -105,7 +105,7 @@ describe("other ablation kinds", () => {
   it("removing a DISPUTING source can raise the conservative bound (ablation is not rigged to fail)", () => {
     const observations = [
       ...dailyObservations(CLAIM_PERIOD, ONE_HOUR, [ctrl("devA", "ctrlA"), ctrl("devC", "ctrlC")]),
-      ...dailyObservations(CLAIM_PERIOD, maskOfHours([18, 19]), [ctrl("devB", "ctrlB")]),
+      ...dailyObservations(CLAIM_PERIOD, maskOfHours([18, 19]), [ctrl("devB", "ctrlB")]), 
     ];
     const input = eligibleInput({ observations });
     const r = runAblation(input, [{ kind: "remove_source", sourceId: "devB" }]);
