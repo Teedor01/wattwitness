@@ -123,6 +123,7 @@ export function runAblation(
   };
 }
 
+/** Removes each distinct source in turn and reports the effect of each removal. */
 export function sweepSources(input: ClaimInput, evaluate: Evaluator = evaluateClaim): AblationReport[] {
   const ids = [...new Set(input.observations.map((o) => o.sourceId))].sort();
   return ids.map((sourceId) => runAblation(input, [{ kind: "remove_source", sourceId }], evaluate));

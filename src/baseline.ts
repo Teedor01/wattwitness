@@ -46,7 +46,7 @@ export interface BuildBaselineArgs {
   observations: readonly Observation[];
   siteId: Hex32;
   claimType: Hex32;
-  period: DayPeriod;
+  period: DayPeriod; 
   classifierVersion: string;
   salt: Hex32;
   config?: Partial<EvaluationConfig>;

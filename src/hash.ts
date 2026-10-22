@@ -2,7 +2,6 @@ import { AbiCoder, concat, keccak256, toUtf8Bytes } from "ethers";
 import type { BaselinePackage, Hex32, Observation } from "./types";
 import { SECONDS_PER_DAY } from "./types";
 
-
 const coder = AbiCoder.defaultAbiCoder();
 
 export const ZERO_HASH: Hex32 = `0x${"00".repeat(32)}`;
@@ -12,7 +11,6 @@ export const BASELINE_TUPLE_TYPE =
   "uint32 baselineMilliHoursPerDayLow,uint32 baselineMilliHoursPerDayHigh,bytes32 baselineEvidenceRoot," +
   "bytes32 classifierVersion,bytes32 salt)";
 
-/** keccak256 of a UTF-8 string, used to turn human-readable ids into bytes32. */
 export function textId(text: string): Hex32 {
   return keccak256(toUtf8Bytes(text)) as Hex32;
 }

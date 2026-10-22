@@ -11,12 +11,10 @@ export function siteIdFor(owner: string, salt: Hex32): Hex32 {
   return keccak256(coder.encode(["address", "bytes32"], [owner, salt])) as Hex32;
 }
 
-/** Slot that holds the single baseline commitment for (site, claimType, postStartDay). */
 export function baselineKey(siteId: Hex32, claimType: Hex32, postStartDay: number): Hex32 {
   return keccak256(coder.encode(["bytes32", "bytes32", "uint32"], [siteId, claimType, postStartDay])) as Hex32;
 }
 
-/** Key of the per-(site, claimType) chronological watermark that blocks overlapping claims. */
 export function watermarkKey(siteId: Hex32, claimType: Hex32): Hex32 {
   return keccak256(coder.encode(["bytes32", "bytes32"], [siteId, claimType])) as Hex32;
 }

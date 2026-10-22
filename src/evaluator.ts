@@ -151,6 +151,7 @@ export function evaluateClaim(input: ClaimInput): EvaluationResult {
     evidenceState = "CORROBORATED";
   }
 
+  // --- Eligibility ---
   const invalidated = reasons.some((r) => r.severity === "invalidating");
   let unfrozenState: EvidenceState = evidenceState;
   if (invalidated) {

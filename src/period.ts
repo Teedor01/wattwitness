@@ -18,7 +18,7 @@ export type ExclusionCode =
 export interface Exclusion {
   code: ExclusionCode;
   sourceId: string;
-  day: string; 
+  day: string;
   message: string;
 }
 
@@ -58,6 +58,7 @@ export interface SummarizeArgs {
   config?: Partial<EvaluationConfig>;
   expectedClassifierVersion?: Hex32;
 }
+
 
 export function summarizePeriod(args: SummarizeArgs): PeriodSummary {
   validatePeriod(args.period);
