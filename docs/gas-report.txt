@@ -1,0 +1,20 @@
+Gas used per call (in-process EVM, optimizer 200 runs, solc 0.8.28). Inspected, not optimised.
+
+Single-call costs (2 sources):
+  registerSite             24550
+  addAttester              95476
+  commitBaseline           47986
+  revealBaseline           34936
+  submitAttestation        26432
+
+createClaim cost scales with (days x sources) because the contract re-derives the bound:
+  days  sources        gas
+     1        2     153194
+     3        2     219238
+     3        4     279838
+     7        4     492694
+    14        4     865192
+    31        4    1769830
+    31        8    3021783
+
+finalizeClaim repeats the same evidence computation (same order of cost as createClaim).

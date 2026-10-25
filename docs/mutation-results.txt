@@ -1,0 +1,58 @@
+M1: caught    remove the baseline timing requirement
+        by: exactly at the start: rejected | test/contract/baseline.test.ts > Invariant 2: a baseline cannot be committed once the post period has begun > exactly at the start: rejected
+M2: caught    allow duplicate claim keys (remove the key check)
+        by: Invariant 9: a finalised claim cannot be finalised or consumed again | test/contract/lifecycle.test.ts > finalisation > Invariant 9: a finalised claim cannot be finalised or consumed again
+M3: caught    replace per-hour quorum with OR (any one source suffices)
+        by: a single attesting source is not enough | test/contract/claims.test.ts > Invariant 5: missing corroboration cannot become a claim > a single attesting source is not enough
+M4: caught    remove challenge freezing (challenge leaves the claim ELIGIBLE)
+        by: a registered source can challenge an ELIGIBLE claim; the event carries identifiers only | test/contract/lifecycle.test.ts > Invariant 6: CHALLENGE freezes the claim > a registered source can challenge an ELIGIBLE claim; the event carries identifiers only
+M5: caught    allow an unauthorised caller to finalise a claim
+        by: every restricted function rejects the wrong caller | test/contract/authorization-replay.test.ts > Invariant 8: unauthorised actors cannot perform restricted transitions > every restricted function rejects the wrong caller
+M6: caught    allow a duplicate attestation (overwrite)
+        by: the same attestation submitted twice | test/contract/authorization-replay.test.ts > replay protection: every replay is rejected or provably harmless > the same attestation submitted twice
+M7: caught    skip commitment verification during reveal
+        by: Invariants 1 and 7: changing ANY committed field fails the reveal | test/contract/baseline.test.ts > reveal: the contract recomputes the Phase 1 commitment itself > Invariants 1 and 7: changing ANY committed field fails the reveal
+M8: caught    allow a claimed amount above the conservative bound
+        by: the amount can be below the bound but never above it (conservative bound is derived on-chain) | test/contract/claims.test.ts > claim creation > the amount can be below the bound but never above it (conservative bound is derived on-chain)
+M9: caught    allow a finalised claim to be finalised again
+        by: Invariant 9: a finalised claim cannot be finalised or consumed again | test/contract/lifecycle.test.ts > finalisation > Invariant 9: a finalised claim cannot be finalised or consumed again
+M2x: caught    duplicate claim key AND overlap watermark both removed (defence in depth is real)
+        by: Invariant 9: a finalised claim cannot be finalised or consumed again | test/contract/lifecycle.test.ts > finalisation > Invariant 9: a finalised claim cannot be finalised or consumed again
+M10: caught    remove the overlapping-period watermark
+        by: overlapping periods cannot be claimed twice (day-level double counting) | test/contract/claims.test.ts > Invariant 4: a claim key can never yield a second successful claim > overlapping periods cannot be claimed twice (day-level double counting)
+M11: caught    allow one controller to register several devices
+        by: one controller cannot register several devices at the same site | test/contract/sites-attestations.test.ts > attester registration > one controller cannot register several devices at the same site
+M12: caught    allow the same wallet to be registered twice
+        by: rejects zero address, zero controller, duplicate wallet | test/contract/sites-attestations.test.ts > attester registration > rejects zero address, zero controller, duplicate wallet
+M13: caught    let unregistered wallets submit attestations
+        by: every restricted function rejects the wrong caller | test/contract/authorization-replay.test.ts > Invariant 8: unauthorised actors cannot perform restricted transitions > every restricted function rejects the wrong caller
+M14: caught    remove the quorum-coverage threshold
+        by: a single attesting source is not enough | test/contract/claims.test.ts > Invariant 5: missing corroboration cannot become a claim > a single attesting source is not enough
+M15: caught    conservative bound uses only corroborated-running hours (ignores disputed/under-covered)
+        by: a later dissenting source makes finalisation fail with StaleEvidence (state is untouched) | test/contract/lifecycle.test.ts > evidence that arrives after a claim was created > a later dissenting source makes finalisation fail with StaleEvidence (state is untouched)
+M16: caught    allow attestations for future days
+        by: rejects future days but accepts today | test/contract/sites-attestations.test.ts > daily attestations > rejects future days but accepts today
+M17: caught    let anyone resolve a challenge
+        by: only the resolver can resolve, and only a CHALLENGED claim | test/contract/lifecycle.test.ts > challenge resolution (placeholder authority) > only the resolver can resolve, and only a CHALLENGED claim
+M18: caught    let anyone reveal a baseline
+        by: only the site owner can reveal; revealing another owner's package is rejected | test/contract/baseline.test.ts > reveal: the contract recomputes the Phase 1 commitment itself > only the site owner can reveal; revealing another owner's package is rejected
+M19: caught    ignore the challenge window at finalisation
+        by: is refused while the challenge window is open and allowed exactly when it closes | test/contract/lifecycle.test.ts > finalisation > is refused while the challenge window is open and allowed exactly when it closes
+M20: caught    allow a committed baseline to be silently replaced
+        by: a committed baseline cannot be replaced, before or after reveal | test/contract/baseline.test.ts > commit validation and Invariant 3: no silent overwrite > a committed baseline cannot be replaced, before or after reveal
+M21: caught    finalise without re-checking current evidence
+        by: a later dissenting source makes finalisation fail with StaleEvidence (state is untouched) | test/contract/lifecycle.test.ts > evidence that arrives after a claim was created > a later dissenting source makes finalisation fail with StaleEvidence (state is untouched)
+M22: caught    allow claims for periods that have not finished
+        by: period rules: must be finished, ordered and at most 31 days | test/contract/claims.test.ts > claim creation > period rules: must be finished, ordered and at most 31 days
+M23: caught    treat disputed hours as corroborated-off
+        by: a later dissenting source makes finalisation fail with StaleEvidence (state is untouched) | test/contract/lifecycle.test.ts > evidence that arrives after a claim was created > a later dissenting source makes finalisation fail with StaleEvidence (state is untouched)
+M24: caught    let anyone challenge a claim
+        by: only registered sources of THIS claim's site can challenge | test/contract/lifecycle.test.ts > Invariant 6: CHALLENGE freezes the claim > only registered sources of THIS claim's site can challenge
+M25: caught    anyone can invalidate a still-valid claim
+        by: anyone can invalidate a claim the stored evidence no longer supports | test/contract/lifecycle.test.ts > evidence that arrives after a claim was created > anyone can invalidate a claim the stored evidence no longer supports
+M26: caught    accept running hours outside coverage
+        by: rejects masks wider than 24 bits and running hours outside coverage | test/contract/sites-attestations.test.ts > daily attestations > rejects masks wider than 24 bits and running hours outside coverage
+M27: caught    allow baseline windows that overlap the post period
+        by: a committed but protocol-invalid package can never be revealed | test/contract/baseline.test.ts > reveal: the contract recomputes the Phase 1 commitment itself > a committed but protocol-invalid package can never be revealed
+
+Mutation summary: 28/28 caught, 0 not caught (survived, invalid or not run)

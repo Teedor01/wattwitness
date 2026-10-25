@@ -1,0 +1,72 @@
+{
+  "chainId": 84532,
+  "transactions": [
+    {
+      "step": "fund attester 0",
+      "hash": "0xaf6205ff619893110044c588d01b48be1e52fef0c36acb8601f6c21f6b0a3fd0"
+    },
+    {
+      "step": "fund attester 1",
+      "hash": "0xf5c9fb33b07fe66a806ae87a95e6ec4ce959f5a3caf55b4f13a1e87b5d032096"
+    },
+    {
+      "step": "registerSite",
+      "hash": "0xdfeaac7b61fd37d612094426e4de0fefb49fad39fa8d16c0650cdddf4454bbb3"
+    },
+    {
+      "step": "addAttester 0",
+      "hash": "0x69b31fbe66b6c7d7433c528deb2447d2eac8755377e5d3cf634c968caf539c20"
+    },
+    {
+      "step": "addAttester 1",
+      "hash": "0xc795fdee3849f20b74f28fd57bfe87d48ba7dd4eca7e546225771f43089116e1"
+    },
+    {
+      "step": "commitBaseline",
+      "hash": "0xbcccbf02238e21b16902da456e4573f320461b64baf28e965559b222fc132142"
+    },
+    {
+      "step": "revealBaseline",
+      "hash": "0x622f4a79c120c9bfc0dea8982ee01e0fb1ef167764a2b3eeba0c0c078bf7fe1e"
+    },
+    {
+      "step": "submitAttestation 0",
+      "hash": "0x7482929d9884a4601bc61e8b78330782f7043ac930c1768be10f404879797cc2"
+    },
+    {
+      "step": "submitAttestation 1",
+      "hash": "0xff3c9b67f52d9bf20a1292ec72f1d5abd5fecd4f15e35fda865faed413242e1d"
+    },
+    {
+      "step": "createClaim",
+      "hash": "0x26aadb66a44c3eec4ce89a2e20e35732610d67d445e3f0247feceb8f91f65698"
+    },
+    {
+      "step": "finalizeClaim",
+      "hash": "0xbca9a6fce23b4ab60cbb94f31f1b2f39c996b65e08ea51114ab2c6228eaccb86"
+    }
+  ],
+  "address": "0x9e75Adae98CDb507B9015e11026Cd0c9Cc3a3b6a",
+  "deployTx": "0xed2719a8c6b2401ea82cad3ecc58dcc5e1f7b466510c95b25fe7d6bce92b5445",
+  "deployBlock": 48367305,
+  "deployer": "0xC30135efE0e464447A816376549445A38E5e49Dc",
+  "config": {
+    "quorum": 2,
+    "minCoverageMilli": 800,
+    "challengeWindowSeconds": 300
+  },
+  "siteId": "0xdb600b1a09dc6c7a3b127b503a5a65f00808b33224ee9076db165100fe6a3738",
+  "postDay": 20747,
+  "package": {
+    "version": 1,
+    "siteId": "0xdb600b1a09dc6c7a3b127b503a5a65f00808b33224ee9076db165100fe6a3738",
+    "claimType": "0x7989c4945d16f4ce5f39e2a10b81cce9b1b6192e162253db03a65d7403b29648",
+    "baselineStartDay": 20739,
+    "baselineEndDay": 20745,
+    "baselineMilliHoursPerDayLow": 8000,
+    "baselineMilliHoursPerDayHigh": 8000,
+    "baselineEvidenceRoot": "0xe06e0582db90a6b9855a6e729ab74acec3bcd7af0f791f5604f123371b1f8c29",
+    "classifierVersion": "0xfce53808dd2cd06824d14a7d2d3944218445f505f2f67c18a02c198bed52031e",
+    "salt": "0x17c939096b5f550c17456dc2b0e6f80581e0f34ee6ac92d5170caa9cd820d9a1"
+  }
+}

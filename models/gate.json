@@ -1,0 +1,13 @@
+{
+  "status": "FAIL",
+  "evaluatedAt": "2026-10-24T01:06:05.356Z",
+  "clipsPerClass": {
+    "generator": 8,
+    "grid_hum": 8,
+    "silence": 8,
+    "other": 8
+  },
+  "generatorRecall": 0.8555133079847909,
+  "generatorPrecision": 1,
+  "report": "docs/audio-eval.md"
+}

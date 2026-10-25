@@ -17,7 +17,7 @@ afterAll(async () => {
 describe("offline-first in a real browser (service worker + IndexedDB)", () => {
   it("record -> queue -> offline -> reload -> reconnect -> sync, with nothing lost", async () => {
     const t = await openApp(browser, srv.url);
-    await waitForServiceWorker(t.page); // after this the app shell is cached and the page is controlled
+    await waitForServiceWorker(t.page);
 
     await act(t.page, 'button[data-action="site-register"]');
     await waitText(t.page, "Local site created");
@@ -40,7 +40,7 @@ describe("offline-first in a real browser (service worker + IndexedDB)", () => {
     await t.page.reload({ waitUntil: "domcontentloaded" });
     await t.page.waitForSelector('#app[data-ready="1"]', { timeout: 20_000 });
     expect(await text(t.page)).toContain("OFFLINE");
-    await go(t.page, "home");
+    await go(t.page, "home"); 
     expect(await fact(t.page, "pending")).toBe("1");
     expect(await fact(t.page, "windows")).toBe("30");
     await go(t.page, "evidence");
@@ -71,7 +71,8 @@ describe("offline-first in a real browser (service worker + IndexedDB)", () => {
     const body = await text(t.page);
     expect(body).toContain("WattWitness");
     expect(body).toContain("OFFLINE");
-    expect(body).toContain("LIVE SENSING LOCKED"); 
+    await go(t.page, "observe");
+    expect(await text(t.page)).toContain("Live classification is locked"); 
   }, 60_000);
 
   it("a sync that fails keeps the evidence stored and says so", async () => {

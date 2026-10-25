@@ -1,0 +1,52 @@
+P1: caught    a failed sync is reported as successful
+        by: × different evidence already on-chain -> conflict, and the chain is not changed
+P2: caught    closing a day drops the evidence instead of queueing it
+        by: × runs end to end and the confirmed on-chain masks equal the local masks
+P3: caught    a changed window silently replaces / hides the original (conflict check removed)
+        by: × a window whose result would CHANGE is refused and nothing is stored
+P4: caught    a day that was already queued accepts more evidence
+        by: × re-processing the same clip is idempotent; a day that was queued is closed to new evidence
+P5: caught    a dead microphone is classified and stored (silence read as 'off')
+        by: × a dead (all-zero) microphone is a failure, not 'generator off'
+P6: caught    clipped audio is accepted
+        by: × clipped, too-short and malformed audio all fail with explicit reasons
+P7: caught    too-short audio is accepted as an (empty) observation
+        by: × clipped, too-short and malformed audio all fail with explicit reasons
+P8: caught    recorded fixtures are rendered as LIVE
+        by: × recorded and simulated evidence can never read as live, whatever the gate says
+P9: caught    live is unlocked without the gate
+        by: × microphone observations are locked unless the real-audio gate passed
+P10: caught    confidence is removed from stored observations
+        by: × runs end to end and the confirmed on-chain masks equal the local masks
+P11: caught    the mask is altered before queueing (running := coverage)
+        by: × runs every step on the local-simulation chain, survives going offline and a reload, and ends frozen
+P12: caught    duplicate-evidence comparison bypassed
+        by: × identical evidence already on-chain -> confirmed
+P13: caught    the chain reader compares against the wrong source's evidence
+        by: × identical evidence already on-chain -> confirmed
+P14: caught    an unknown result is rendered as 'Generator off'
+        by: × an unknown hour shows no confidence percentage; a known one does
+P15: caught    an unattested hour is drawn as 'listened, nothing heard'
+        by: × runs end to end and the confirmed on-chain masks equal the local masks
+P16: caught    offline persistence removed (writes never reach storage)
+        by: × never loses queued evidence across a reload, and syncs once reconnected
+P17: caught    a failed storage write is swallowed
+        by: × a storage write failure is surfaced, never swallowed
+P18: caught    corrupt stored data is treated as empty
+        by: × refuses to treat unreadable stored data as empty (it may be unsent evidence)
+P19: caught    syncing while offline is attempted (offline check removed)
+        by: × never loses queued evidence across a reload, and syncs once reconnected
+P20: caught    the synthetic-model flag is dropped from stored observations
+        by: × records the classification, confidence and model on every window, with no audio
+P21: caught    an unfinalized claim is titled 'Verified'
+        by: × a claim is never called a carbon credit, and is 'Verified' only once finalized
+P22: caught    the simulated chain is not restored after a reload
+        by: × never loses queued evidence across a reload, and syncs once reconnected
+P23: caught    erase-everything does not erase
+        by: × resetAll removes every stored record
+P24: caught    overlapping chain calls are not serialised
+        by: × many concurrent views and sends all complete and give consistent results
+P25: caught    processing with no classifier crashes instead of failing cleanly (no-model guard removed)
+        by: × processing without any classifier fails cleanly instead of crashing or inventing a result
+
+PWA/sync mutation summary: 25/25 caught

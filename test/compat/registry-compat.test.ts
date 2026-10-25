@@ -3,7 +3,6 @@ import vectors from "../../vectors/vectors.json";
 import { baselineCommitmentHash, siteIdFor, type BaselinePackage } from "../../src";
 import { ADDR, CLAIM_TYPE, expectOk, expectRevert, newWorld, SITE_SALT, startOf } from "../contract/world";
 
-
 describe("Phase 1 baseline vectors, bound to a real registry site, through commit and reveal", () => {
   const realize = (pkg: BaselinePackage, siteId: string): BaselinePackage => ({ ...pkg, siteId: siteId as never, claimType: CLAIM_TYPE });
 
@@ -18,7 +17,6 @@ describe("Phase 1 baseline vectors, bound to a real registry site, through commi
       if (i < 2) {
         expectOk(r); 
       } else {
-
         expectRevert(r, "InvalidBaselinePackage");
       }
     });

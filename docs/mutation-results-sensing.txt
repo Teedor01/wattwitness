@@ -1,0 +1,42 @@
+S1: caught   'other' noise counts as listening
+        by: × low-confidence, bad-quality and 'other' windows never count as listening
+S2: caught   claim and baseline roles use the same running threshold
+        by: × role bias: a 30% generator share is RUNNING for a claim period but NOT for a baseline
+S3: caught   valid-window share is ignored for coverage
+        by: × a hour dominated by invalid windows is not covered even if enough valid ones remain
+S4: caught   confidence boundary off by one (>= becomes >)
+        by: × a window at exactly the confidence threshold counts; one point below does not
+S5: caught   running no longer requires coverage
+        by: × respects hour boundaries exactly and ignores windows outside the UTC day
+S6: caught   hour index rounds instead of floors
+        by: × role bias: a 30% generator share is RUNNING for a claim period but NOT for a baseline
+S7: caught   nothing-to-submit day is submitted anyway
+        by: × an hour with too few valid windows is NOT covered (no evidence is not evidence of absence)
+S8: caught   clipping threshold effectively disabled
+        by: × qualityOk rejects a dead microphone and heavy clipping, with an exact clipping boundary
+S9: caught   dead microphone accepted
+        by: × qualityOk rejects a dead microphone and heavy clipping, with an exact clipping boundary
+S10: caught   queue silently ignores conflicting evidence
+        by: × is idempotent for identical evidence and refuses to overwrite different evidence
+S11: caught   duplicate on-chain counts as success without comparing masks
+        by: × DuplicateAttestation counts as success ONLY when the on-chain masks match the local ones
+S12: caught   terminal contract errors are retried forever
+        by: × marks terminal contract errors as rejected and never retries them
+S13: caught   corrupt queue silently reset to empty
+        by: × refuses to reset a corrupt store (it may hold unsent evidence)
+S14: caught   queue skips the attempt cap
+        by: × stalls after maxAttempts and resumes after resetAttempts
+S15: caught   leave-one-clip-out leaks the held-out clip into training
+        by: × holds out whole clips: near-duplicate windows cannot leak into training
+S16: caught   training accepts classes with a single clip
+        by: × refuses training data that cannot support evaluation or contains junk
+S17: caught   confusion matrix transposed
+        by: × orients the confusion matrix correctly: rows are the TRUE class, columns the PREDICTED class
+S18: caught   WAV encoder stops clipping
+        by: × clips out-of-range samples instead of wrapping
+S19: caught   resampler low-pass cutoff lets aliases through
+        by: × removes content above the new Nyquist instead of aliasing it
+S20: caught   stereo is not averaged (left channel only)
+        by: × averages stereo to mono
+
+Sensing/sync mutation summary: 20/20 caught

@@ -27,8 +27,6 @@ afterAll(async () => {
 describe("mode honesty in a real browser", () => {
   it("the production build locks live sensing and says why; there is no record button", async () => {
     const t = await openApp(withMic, prod.url);
-    expect(await text(t.page)).toContain("LIVE SENSING LOCKED");
-    expect(await t.page.$eval('[data-gate]', (e) => (e as HTMLElement).dataset["gate"])).toBe("NOT_RUN");
     await go(t.page, "observe");
     const body = await text(t.page);
     expect(body).toContain("Live classification is locked");

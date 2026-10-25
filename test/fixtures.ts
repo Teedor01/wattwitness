@@ -15,8 +15,8 @@ export const CLAIM_TYPE: Hex32 = textId("GENERATOR_DISPLACEMENT_V1");
 export const CLASSIFIER = "wattwitness-clf-0.1";
 export const SALT: Hex32 = textId("salt:demo-1");
 
-export const BASELINE_PERIOD = { startDay: 100, endDay: 106 };
-export const CLAIM_PERIOD = { startDay: 110, endDay: 112 };
+export const BASELINE_PERIOD = { startDay: 100, endDay: 106 }; 
+export const CLAIM_PERIOD = { startDay: 110, endDay: 112 }; 
 export const COMMIT_TS = 110 * 86_400 - 1;
 
 export const EIGHT_HOURS = maskOfHours([8, 9, 10, 11, 12, 13, 14, 15]);
@@ -75,6 +75,7 @@ export function eligibleInput(overrides: Partial<ClaimInput> = {}): ClaimInput {
     ...overrides,
   };
 }
+
 export function mulberry32(seed: number): () => number {
   let a = seed >>> 0;
   return () => {

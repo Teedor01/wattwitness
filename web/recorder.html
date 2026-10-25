@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WattWitness clip recorder</title>
+<style>
+  :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+  body { margin: 0 auto; max-width: 34rem; padding: 1rem; line-height: 1.4; }
+  h1 { font-size: 1.25rem; }
+  label { display: block; margin: .75rem 0 .25rem; font-weight: 600; }
+  select, input, button { font: inherit; padding: .6rem; width: 100%; box-sizing: border-box; }
+  button { margin-top: .75rem; cursor: pointer; }
+  #meter { height: .6rem; background: #8884; margin-top: .75rem; border-radius: .3rem; overflow: hidden; }
+  #bar { height: 100%; width: 0; background: #2a9d4b; }
+  #status { margin: .75rem 0; min-height: 1.4em; }
+  .warn { color: #b45309; }
+  .clip { border: 1px solid #8886; border-radius: .5rem; padding: .6rem; margin: .6rem 0; }
+  .clip audio { width: 100%; }
+  small { opacity: .75; }
+</style>
+</head>
+<body>
+<h1>WattWitness clip recorder</h1>
+<p><small>Records labelled WAV clips for the classifier dataset. Audio stays in this page: nothing is uploaded. Get the other person's consent before recording speech, and keep clips out of git.</small></p>
+
+<label for="label">What is the microphone hearing?</label>
+<select id="label">
+  <option value="generator">generator running</option>
+  <option value="grid_hum">grid power only (no generator): fridge, inverter, transformer hum</option>
+  <option value="silence">quiet room</option>
+  <option value="other">other noise: speech, traffic, fan, TV</option>
+</select>
+
+<label for="session">Session tag (no names or addresses)</label>
+<input id="session" value="session1" maxlength="24" pattern="[a-z0-9_-]+">
+
+<label for="secs">Length (seconds)</label>
+<input id="secs" type="number" value="60" min="10" max="300">
+
+<button id="rec">Start recording</button>
+<div id="meter"><div id="bar"></div></div>
+<div id="status" role="status"></div>
+<div id="clips"></div>
+
+<script>
+// <pure>
+function encodeWav16(chunks, sampleRate) {
+  var n = 0, i, j;
+  for (i = 0; i < chunks.length; i++) n += chunks[i].length;
+  var buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf);
+  function ascii(o, s) { for (var k = 0; k < s.length; k++) v.setUint8(o + k, s.charCodeAt(k)); }
+  ascii(0, "RIFF"); v.setUint32(4, 36 + n * 2, true); ascii(8, "WAVE"); ascii(12, "fmt ");
+  v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+  v.setUint32(24, sampleRate, true); v.setUint32(28, sampleRate * 2, true);
+  v.setUint16(32, 2, true); v.setUint16(34, 16, true); ascii(36, "data"); v.setUint32(40, n * 2, true);
+  var o = 44;
+  for (i = 0; i < chunks.length; i++) {
+    for (j = 0; j < chunks[i].length; j++) {
+      var s = Math.max(-1, Math.min(1, chunks[i][j]));
+      v.setInt16(o, s < 0 ? Math.round(s * 32768) : Math.round(s * 32767), true);
+      o += 2;
+    }
+  }
+  return new Uint8Array(buf);
+}
+function peakOf(chunks) {
+  var p = 0;
+  for (var i = 0; i < chunks.length; i++) for (var j = 0; j < chunks[i].length; j++) { var a = Math.abs(chunks[i][j]); if (a > p) p = a; }
+  return p;
+}
+function clipName(label, session, n) {
+  var tag = String(session).toLowerCase().replace(/[^a-z0-9_-]/g, "") || "session";
+  return label + "__" + tag + "__" + String(n).padStart(3, "0") + ".wav";
+}
+// </pure>
+
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var count = 0, recording = false;
+
+  async function record(seconds) {
+    // Browser audio "enhancements" would suppress or distort a steady engine tone. Switch them all off.
+    var stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false, channelCount: 1 } });
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var src = ctx.createMediaStreamSource(stream);
+    var chunks = [], total = 0, target = Math.round(seconds * ctx.sampleRate);
+    var proc = ctx.createScriptProcessor(4096, 1, 1);
+    var mute = ctx.createGain(); mute.gain.value = 0;
+    var done;
+    var finished = new Promise(function (r) { done = r; });
+    proc.onaudioprocess = function (e) {
+      var d = e.inputBuffer.getChannelData(0), copy = new Float32Array(d.length);
+      copy.set(d); chunks.push(copy); total += copy.length;
+      var peak = 0; for (var i = 0; i < d.length; i++) { var a = Math.abs(d[i]); if (a > peak) peak = a; }
+      $("bar").style.width = Math.min(100, peak * 100) + "%";
+      $("status").textContent = "Recording... " + Math.floor(total / ctx.sampleRate) + " / " + seconds + " s";
+      if (total >= target) done();
+    };
+    src.connect(proc); proc.connect(mute); mute.connect(ctx.destination);
+    await finished;
+    proc.disconnect(); src.disconnect();
+    stream.getTracks().forEach(function (t) { t.stop(); });
+    var rate = ctx.sampleRate; await ctx.close();
+    return { chunks: chunks, rate: rate };
+  }
+
+  $("rec").onclick = async function () {
+    if (recording) return;
+    recording = true; $("rec").disabled = true;
+    try {
+      var label = $("label").value, secs = Math.max(10, Math.min(300, Number($("secs").value) || 60));
+      $("status").textContent = "Starting microphone...";
+      var r = await record(secs);
+      var peak = peakOf(r.chunks), bytes = encodeWav16(r.chunks, r.rate);
+      var name = clipName(label, $("session").value, ++count);
+      var url = URL.createObjectURL(new Blob([bytes], { type: "audio/wav" }));
+      var div = document.createElement("div"); div.className = "clip";
+      var warn = peak >= 0.999 ? "CLIPPED: lower the gain or move the phone away; this clip may be rejected." : peak < 0.0005 ? "Almost no signal: is the microphone covered or muted?" : "";
+      div.innerHTML = "<strong></strong> <small></small><br><audio controls></audio><br><a download>Save " + "WAV</a><div class='warn'></div>";
+      div.querySelector("strong").textContent = name;
+      div.querySelector("small").textContent = r.rate + " Hz, peak " + peak.toFixed(3);
+      div.querySelector("audio").src = url;
+      div.querySelector("a").href = url; div.querySelector("a").download = name;
+      div.querySelector(".warn").textContent = warn;
+      $("clips").prepend(div);
+      $("status").textContent = "Saved " + name + ". Tap Save WAV, then record the next clip.";
+    } catch (e) {
+      $("status").innerHTML = ""; var s = document.createElement("span"); s.className = "warn";
+      s.textContent = "Could not record: " + (e && e.message ? e.message : e) + " (microphone access needs https or localhost).";
+      $("status").appendChild(s);
+    } finally { recording = false; $("rec").disabled = false; $("bar").style.width = "0"; }
+  };
+})();
+</script>
+</body>
+</html>

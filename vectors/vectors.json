@@ -1,0 +1,310 @@
+{
+  "note": "Generated from the TypeScript core; independently verified against compiled Solidity by test/compat.",
+  "baselines": [
+    {
+      "name": "demo baseline (matches test fixtures)",
+      "pkg": {
+        "version": 1,
+        "siteId": "0xa8f7abd54ad49284011567d6ebff72ea29497a3490c4b12f058f17728876cfcb",
+        "claimType": "0x7989c4945d16f4ce5f39e2a10b81cce9b1b6192e162253db03a65d7403b29648",
+        "baselineStartDay": 100,
+        "baselineEndDay": 106,
+        "baselineMilliHoursPerDayLow": 8000,
+        "baselineMilliHoursPerDayHigh": 8000,
+        "baselineEvidenceRoot": "0x038702c9ab6a8a7dd47ee2cfe1088c97a003446c3965c4fbf1f85f9f9700f81a",
+        "classifierVersion": "0xfce53808dd2cd06824d14a7d2d3944218445f505f2f67c18a02c198bed52031e",
+        "salt": "0xf820f5b8d60fa6c8922919d51acb2d7b52f730e50c951b1e8fa2828429f06e46"
+      },
+      "hash": "0xefad68dce510c61d3a077b6af31aa977d648e5c03aaf7462cc2a80590d5d703d"
+    },
+    {
+      "name": "uncertain baseline",
+      "pkg": {
+        "version": 1,
+        "siteId": "0x00dd6a7a09f241f2b192b9ff790e8ed0d7efe76f81f602d01924dfabbe4183a4",
+        "claimType": "0x7989c4945d16f4ce5f39e2a10b81cce9b1b6192e162253db03a65d7403b29648",
+        "baselineStartDay": 20000,
+        "baselineEndDay": 20013,
+        "baselineMilliHoursPerDayLow": 5143,
+        "baselineMilliHoursPerDayHigh": 10286,
+        "baselineEvidenceRoot": "0x97a34039b15054252a5fd2632b827df033fd7e27daf29cb3d4c56560da961e11",
+        "classifierVersion": "0x4f01d5a2817cc1cf743f3250918d4774b8d3d97abbe85b72f5979cf8a601e0ef",
+        "salt": "0xbc625e38c2cdc1db1f44ab2e1967d7d14e024bf65b40c80381ea3d4185bd2fbd"
+      },
+      "hash": "0x0699cb39fa802ba28dfc4660c4af85f5025513b208619fab1ae09cde9daf564b"
+    },
+    {
+      "name": "extreme maxima (encodable, not protocol-valid)",
+      "pkg": {
+        "version": 65535,
+        "siteId": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "claimType": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "baselineStartDay": 4294967295,
+        "baselineEndDay": 4294967295,
+        "baselineMilliHoursPerDayLow": 4294967295,
+        "baselineMilliHoursPerDayHigh": 4294967295,
+        "baselineEvidenceRoot": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "classifierVersion": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "salt": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      },
+      "hash": "0xc559103aaed3e7be09dbb23e343c788a2ad200b013e754ec5597c4424513546d"
+    },
+    {
+      "name": "extreme minima (encodable, not protocol-valid)",
+      "pkg": {
+        "version": 0,
+        "siteId": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "claimType": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "baselineStartDay": 0,
+        "baselineEndDay": 0,
+        "baselineMilliHoursPerDayLow": 0,
+        "baselineMilliHoursPerDayHigh": 0,
+        "baselineEvidenceRoot": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "classifierVersion": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "salt": "0x0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "hash": "0x2d77d208db8c601b953c1a107b633226835576967fe4dec12375b07a6c6a38cf"
+    }
+  ],
+  "claimKeys": [
+    {
+      "siteId": "0xa8f7abd54ad49284011567d6ebff72ea29497a3490c4b12f058f17728876cfcb",
+      "startDay": 110,
+      "endDay": 112,
+      "claimType": "0x7989c4945d16f4ce5f39e2a10b81cce9b1b6192e162253db03a65d7403b29648",
+      "key": "0x9f32c036ee906e60eab043d9c6a89416a7478b9fefeee4f52a7abd51dd9c7566"
+    },
+    {
+      "siteId": "0xa8f7abd54ad49284011567d6ebff72ea29497a3490c4b12f058f17728876cfcb",
+      "startDay": 110,
+      "endDay": 113,
+      "claimType": "0x7989c4945d16f4ce5f39e2a10b81cce9b1b6192e162253db03a65d7403b29648",
+      "key": "0x905bcb498c69c3cfbb23ae5a107537eb45217441ba1191be732613ac074d744a"
+    },
+    {
+      "siteId": "0xb63c997d070540ea673743b601c4a825f2f75c5b37ee7847ab516a9f79be01fa",
+      "startDay": 110,
+      "endDay": 112,
+      "claimType": "0x7989c4945d16f4ce5f39e2a10b81cce9b1b6192e162253db03a65d7403b29648",
+      "key": "0x17cdc7cce4a304c82e5aaf4449b18f01e233fad33f5c1d5e38350abfad2d7bd5"
+    },
+    {
+      "siteId": "0xa8f7abd54ad49284011567d6ebff72ea29497a3490c4b12f058f17728876cfcb",
+      "startDay": 0,
+      "endDay": 0,
+      "claimType": "0xbcec83903572081d1d2fe02b1f7aae66026846719323f306763e24424be74358",
+      "key": "0x35c63e45a1b70be6eaf65a79f430f9f47e8d16207d510c68e15f25996afeb62d"
+    },
+    {
+      "siteId": "0xa8f7abd54ad49284011567d6ebff72ea29497a3490c4b12f058f17728876cfcb",
+      "startDay": 4294967295,
+      "endDay": 4294967295,
+      "claimType": "0x7989c4945d16f4ce5f39e2a10b81cce9b1b6192e162253db03a65d7403b29648",
+      "key": "0x36abd0ce53af3b3a93c3403cddc4c00b813f90fa2fbf7beb43f249882d27c84b"
+    }
+  ],
+  "leaves": [
+    {
+      "siteId": "0xa8f7abd54ad49284011567d6ebff72ea29497a3490c4b12f058f17728876cfcb",
+      "day": 110,
+      "sourceId": "devA",
+      "sourceIdHash": "0x897509b1d079bd7bea8eecc180fbac3fdab87906c9670438627e388ad10fb724",
+      "runningMask": 262144,
+      "coverageMask": 16777215,
+      "leaf": "0x83f869faeeb0f23e17806f1af0f4951505b4bd0b440a0d995b1711aaafd36462"
+    },
+    {
+      "siteId": "0xa8f7abd54ad49284011567d6ebff72ea29497a3490c4b12f058f17728876cfcb",
+      "day": 110,
+      "sourceId": "devB",
+      "sourceIdHash": "0x05deb74bca27303e20dddd3cc55b4d1693b234d3eac72b41dfffa4fab516888c",
+      "runningMask": 0,
+      "coverageMask": 4194303,
+      "leaf": "0xa300bc7b449f282c457cea9f923cb7b00704b1e1d7ff5997770e3f81fc7b0f82"
+    },
+    {
+      "siteId": "0xa8f7abd54ad49284011567d6ebff72ea29497a3490c4b12f058f17728876cfcb",
+      "day": 4294967295,
+      "sourceId": "devA",
+      "sourceIdHash": "0x897509b1d079bd7bea8eecc180fbac3fdab87906c9670438627e388ad10fb724",
+      "runningMask": 16777215,
+      "coverageMask": 16777215,
+      "leaf": "0xadf34c04369ebba3110dfa40d4de93e620321278338ab4f3a9ea15508ac39539"
+    }
+  ],
+  "pairs": [
+    {
+      "a": "0x3ac225168df54212a25c1c01fd35bebfea408fdac2e31ddd6f80a4bbf9a5f1cb",
+      "b": "0xb5553de315e0edf504d9150af82dafa5c4667fa618ed0a6f19c69b41166c5510",
+      "hash": "0x805b21d846b189efaeb0377d6bb0d201b3872a363e607c25088f025b0c6ae1f8"
+    },
+    {
+      "a": "0xb5553de315e0edf504d9150af82dafa5c4667fa618ed0a6f19c69b41166c5510",
+      "b": "0x3ac225168df54212a25c1c01fd35bebfea408fdac2e31ddd6f80a4bbf9a5f1cb",
+      "hash": "0x805b21d846b189efaeb0377d6bb0d201b3872a363e607c25088f025b0c6ae1f8"
+    },
+    {
+      "a": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "b": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "hash": "0x22ddafaf521412b39e3398371002be31620857ea0b5270601013b775e0cc6bad"
+    },
+    {
+      "a": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "b": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "hash": "0x22ddafaf521412b39e3398371002be31620857ea0b5270601013b775e0cc6bad"
+    },
+    {
+      "a": "0x3bdb6b41102a29ecc505b69ad4668818105aee551ed2fb6750521336167f0cb0",
+      "b": "0x3bdb6b41102a29ecc505b69ad4668818105aee551ed2fb6750521336167f0cb0",
+      "hash": "0xbafb9dbbd561e75891ae804ebf237de5101410460d515ef1760a6248cdcf0d8d"
+    }
+  ],
+  "timing": [
+    {
+      "commitTimestampSec": 9503999,
+      "claimStartDay": 110,
+      "timely": true
+    },
+    {
+      "commitTimestampSec": 9504000,
+      "claimStartDay": 110,
+      "timely": false
+    },
+    {
+      "commitTimestampSec": 9504001,
+      "claimStartDay": 110,
+      "timely": false
+    },
+    {
+      "commitTimestampSec": 0,
+      "claimStartDay": 0,
+      "timely": false
+    },
+    {
+      "commitTimestampSec": 0,
+      "claimStartDay": 1,
+      "timely": true
+    },
+    {
+      "commitTimestampSec": 371085174287999,
+      "claimStartDay": 4294967295,
+      "timely": true
+    },
+    {
+      "commitTimestampSec": 371085174288000,
+      "claimStartDay": 4294967295,
+      "timely": false
+    }
+  ],
+  "quorum": [
+    {
+      "masks": [
+        240,
+        60
+      ],
+      "quorum": 2,
+      "result": 48
+    },
+    {
+      "masks": [
+        255,
+        16711680
+      ],
+      "quorum": 2,
+      "result": 0
+    },
+    {
+      "masks": [
+        11259375,
+        11259375
+      ],
+      "quorum": 2,
+      "result": 11259375
+    },
+    {
+      "masks": [
+        15,
+        240,
+        4080
+      ],
+      "quorum": 2,
+      "result": 240
+    },
+    {
+      "masks": [
+        15,
+        240,
+        4080
+      ],
+      "quorum": 3,
+      "result": 0
+    },
+    {
+      "masks": [
+        4278190081,
+        4278190081
+      ],
+      "quorum": 2,
+      "result": 1
+    },
+    {
+      "masks": [
+        4294967295,
+        4294967295,
+        4294967295
+      ],
+      "quorum": 3,
+      "result": 16777215
+    },
+    {
+      "masks": [],
+      "quorum": 1,
+      "result": 0
+    }
+  ],
+  "merkle": [
+    {
+      "leaves": [
+        "0x1fb91f7eb2cf2a8094802e82512b95af372f66555c0bce96861bfb2f7ccfba8a"
+      ],
+      "root": "0x1fb91f7eb2cf2a8094802e82512b95af372f66555c0bce96861bfb2f7ccfba8a"
+    },
+    {
+      "leaves": [
+        "0x1fb91f7eb2cf2a8094802e82512b95af372f66555c0bce96861bfb2f7ccfba8a",
+        "0x6bea6b1ca57f3bc93e68f42ca0d2524dcfa8e6bd2480bfbc7052cbf3461f73af"
+      ],
+      "root": "0xc550dade3326654bb0af163434b57a064ec2ead1956feb715b55826b16516dde"
+    },
+    {
+      "leaves": [
+        "0x1fb91f7eb2cf2a8094802e82512b95af372f66555c0bce96861bfb2f7ccfba8a",
+        "0x6bea6b1ca57f3bc93e68f42ca0d2524dcfa8e6bd2480bfbc7052cbf3461f73af",
+        "0xd45083007ed6fed40b7adc1161bd02f9ad756d7722d4af8e443d8edc4da6947a"
+      ],
+      "root": "0xdf157c598ac087e960a8188a9cd5eff4a8d06a03c886aaa20a5297f7871aa0c4"
+    },
+    {
+      "leaves": [
+        "0x1fb91f7eb2cf2a8094802e82512b95af372f66555c0bce96861bfb2f7ccfba8a",
+        "0x6bea6b1ca57f3bc93e68f42ca0d2524dcfa8e6bd2480bfbc7052cbf3461f73af",
+        "0xd45083007ed6fed40b7adc1161bd02f9ad756d7722d4af8e443d8edc4da6947a",
+        "0x25c63d0d88c14e22ca8e2efbdfc4d9b6bf1dd379fbf12d87f6e32ecf9c4d98f7",
+        "0xc6e20e9c118dba126bc791e1ecea7ff0641c04ef6f7789fe00c8076119f1fa7f"
+      ],
+      "root": "0x5bfa4f64ab3b822d264ae62f17e331f621ef809a078ef5be9b599876e6e385a5"
+    },
+    {
+      "leaves": [
+        "0x1fb91f7eb2cf2a8094802e82512b95af372f66555c0bce96861bfb2f7ccfba8a",
+        "0x6bea6b1ca57f3bc93e68f42ca0d2524dcfa8e6bd2480bfbc7052cbf3461f73af",
+        "0xd45083007ed6fed40b7adc1161bd02f9ad756d7722d4af8e443d8edc4da6947a",
+        "0x25c63d0d88c14e22ca8e2efbdfc4d9b6bf1dd379fbf12d87f6e32ecf9c4d98f7",
+        "0xc6e20e9c118dba126bc791e1ecea7ff0641c04ef6f7789fe00c8076119f1fa7f",
+        "0xaaff4e28f4aeceeaa4072b4bdf483dad2ac8b77b4b087c995c8caacb2f171eb5",
+        "0xd2226743243d711dd84f284a2492efbeeed661d3679874ffa59528a6786995e9"
+      ],
+      "root": "0xd7f89e5024028b4ebe137a198f47668c9b62adc98a2d828f72c36fe2f359d912"
+    }
+  ]
+}

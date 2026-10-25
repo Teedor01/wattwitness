@@ -1,0 +1,1333 @@
+{
+  "contractName": "WattWitnessRegistry",
+  "solcVersion": "0.8.28+commit.7893614a.Emscripten.clang",
+  "settings": {
+    "evmVersion": "cancun",
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    }
+  },
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint8",
+          "name": "quorum_",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint16",
+          "name": "minCoverageMilli_",
+          "type": "uint16"
+        },
+        {
+          "internalType": "uint64",
+          "name": "challengeWindow_",
+          "type": "uint64"
+        },
+        {
+          "internalType": "address",
+          "name": "resolver_",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "AlreadyChallengedByYou",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "AlreadyRegistered",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "AlreadyRevealed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "BaselineNotRevealed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ChallengeWindowOpen",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ClaimStillValid",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "CommitmentExists",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "CommitmentMismatch",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ControllerAlreadyRegistered",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "DuplicateAttestation",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "DuplicateClaim",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ExceedsConservativeBound",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "FutureDay",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InsufficientCoverage",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint8",
+          "name": "reason",
+          "type": "uint8"
+        }
+      ],
+      "name": "InvalidBaselinePackage",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidConfig",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidMask",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidPeriod",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NoCommitment",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotRegisteredAttester",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotResolver",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotSiteOwner",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "OverlapsPreviousClaim",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "PeriodNotFinished",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "PeriodTooLong",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "SiteExists",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "StaleEvidence",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "TimingViolation",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "TooManyAttesters",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "UnknownClaim",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "UnknownSite",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "WrongState",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ZeroAddress",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ZeroAmount",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ZeroCommitment",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ZeroController",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "siteId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "day",
+          "type": "uint32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "attester",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "runningMask",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "coverageMask",
+          "type": "uint32"
+        }
+      ],
+      "name": "AttestationSubmitted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "siteId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "attester",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "controllerId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "AttesterRegistered",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "siteId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "claimType",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "postStartDay",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "commitment",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint64",
+          "name": "committedAt",
+          "type": "uint64"
+        }
+      ],
+      "name": "BaselineCommitted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "siteId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "claimType",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "postStartDay",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "baselineStartDay",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "baselineEndDay",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "lowMilliHoursPerDay",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "highMilliHoursPerDay",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "evidenceRoot",
+          "type": "bytes32"
+        }
+      ],
+      "name": "BaselineRevealed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "claimKey",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "upheld",
+          "type": "bool"
+        }
+      ],
+      "name": "ChallengeResolved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "claimKey",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "challenger",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "evidenceHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "ClaimChallenged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "claimKey",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "siteId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "startDay",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "endDay",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "claimType",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint64",
+          "name": "claimedMilliHours",
+          "type": "uint64"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint64",
+          "name": "conservativeMilliHours",
+          "type": "uint64"
+        }
+      ],
+      "name": "ClaimCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "claimKey",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint64",
+          "name": "claimedMilliHours",
+          "type": "uint64"
+        }
+      ],
+      "name": "ClaimFinalized",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "claimKey",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "reason",
+          "type": "uint8"
+        }
+      ],
+      "name": "ClaimInvalidated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "siteId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "SiteRegistered",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "MAX_ATTESTERS",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "MAX_CLAIM_DAYS",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "MAX_MILLI_HOURS_PER_DAY",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "PROTOCOL_VERSION",
+      "outputs": [
+        {
+          "internalType": "uint16",
+          "name": "",
+          "type": "uint16"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "siteId",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address",
+          "name": "attester",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "controllerId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "addAttester",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        },
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "attestationOf",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "siteId",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "claimType",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "postStartDay",
+          "type": "uint32"
+        }
+      ],
+      "name": "baselineKey",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "baselines",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "commitment",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint64",
+          "name": "committedAt",
+          "type": "uint64"
+        },
+        {
+          "internalType": "bool",
+          "name": "revealed",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint32",
+          "name": "baselineStartDay",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "baselineEndDay",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "lowMilliHoursPerDay",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "highMilliHoursPerDay",
+          "type": "uint32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "evidenceRoot",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "key",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "evidenceHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "challengeClaim",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "challengeWindow",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "claimedThrough",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "claims",
+      "outputs": [
+        {
+          "internalType": "enum WattWitnessRegistry.ClaimState",
+          "name": "state",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint32",
+          "name": "startDay",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "endDay",
+          "type": "uint32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "siteId",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "claimType",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint64",
+          "name": "claimedMilliHours",
+          "type": "uint64"
+        },
+        {
+          "internalType": "uint64",
+          "name": "createdAt",
+          "type": "uint64"
+        },
+        {
+          "internalType": "uint64",
+          "name": "eligibleSince",
+          "type": "uint64"
+        },
+        {
+          "internalType": "uint64",
+          "name": "finalizedAt",
+          "type": "uint64"
+        },
+        {
+          "internalType": "address",
+          "name": "challenger",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "siteId",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "claimType",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "postStartDay",
+          "type": "uint32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "commitment",
+          "type": "bytes32"
+        }
+      ],
+      "name": "commitBaseline",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "controllerOf",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "controllerUsed",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "siteId",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "startDay",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "endDay",
+          "type": "uint32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "claimType",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint64",
+          "name": "claimedMilliHours",
+          "type": "uint64"
+        }
+      ],
+      "name": "createClaim",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "key",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "key",
+          "type": "bytes32"
+        }
+      ],
+      "name": "finalizeClaim",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "siteId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "getAttesters",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "hasChallenged",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "key",
+          "type": "bytes32"
+        }
+      ],
+      "name": "invalidateStaleClaim",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "isAttester",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "minCoverageMilli",
+      "outputs": [
+        {
+          "internalType": "uint16",
+          "name": "",
+          "type": "uint16"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "siteId",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "startDay",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "endDay",
+          "type": "uint32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "claimType",
+          "type": "bytes32"
+        }
+      ],
+      "name": "previewClaim",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint32",
+              "name": "running",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint32",
+              "name": "off",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint32",
+              "name": "disputed",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint32",
+              "name": "under",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint32",
+              "name": "totalHours",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint32",
+              "name": "coverageMilli",
+              "type": "uint32"
+            }
+          ],
+          "internalType": "struct WattWitnessRegistry.Evidence",
+          "name": "e",
+          "type": "tuple"
+        },
+        {
+          "internalType": "uint64",
+          "name": "conservativeMilliHours",
+          "type": "uint64"
+        },
+        {
+          "internalType": "uint64",
+          "name": "generousMilliHours",
+          "type": "uint64"
+        },
+        {
+          "internalType": "bool",
+          "name": "baselineRevealed",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "quorum",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "registerSite",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "siteId",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "key",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bool",
+          "name": "upheld",
+          "type": "bool"
+        }
+      ],
+      "name": "resolveChallenge",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "resolver",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint16",
+              "name": "version",
+              "type": "uint16"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "siteId",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "claimType",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "uint32",
+              "name": "baselineStartDay",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint32",
+              "name": "baselineEndDay",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint32",
+              "name": "baselineMilliHoursPerDayLow",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint32",
+              "name": "baselineMilliHoursPerDayHigh",
+              "type": "uint32"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "baselineEvidenceRoot",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "classifierVersion",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "salt",
+              "type": "bytes32"
+            }
+          ],
+          "internalType": "struct WattWitnessCore.BaselinePackage",
+          "name": "pkg",
+          "type": "tuple"
+        },
+        {
+          "internalType": "uint32",
+          "name": "postStartDay",
+          "type": "uint32"
+        }
+      ],
+      "name": "revealBaseline",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "siteIdFor",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "sites",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "siteId",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "day",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "runningMask",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "coverageMask",
+          "type": "uint32"
+        }
+      ],
+      "name": "submitAttestation",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x610100604052348015610010575f5ffd5b50604051612c07380380612c0783398101604081905261002f916100b2565b60028460ff1610806100445750600860ff8516115b8061005457506103e88361ffff16115b8061006657506001600160a01b038116155b15610084576040516306b7c75960e31b815260040160405180910390fd5b60ff90931660805261ffff90911660a0526001600160401b031660c0526001600160a01b031660e05261012f565b5f5f5f5f608085870312156100c5575f5ffd5b845160ff811681146100d5575f5ffd5b602086015190945061ffff811681146100ec575f5ffd5b60408601519093506001600160401b0381168114610108575f5ffd5b60608601519092506001600160a01b0381168114610124575f5ffd5b939692955090935050565b60805160a05160c05160e051612a826101855f395f81816101e50152610f6901525f81816104390152610e2d01525f81816103750152611a6401525f818161023e01528181611f320152611f5f0152612a825ff3fe608060405234801561000f575f5ffd5b50600436106101dc575f3560e01c8063861a141211610109578063da7717331161009e578063f58e9fac1161006e578063f58e9fac14610683578063f913c1b31461068c578063fb74f7bf1461069f578063ff21e615146106cc575f5ffd5b8063da771733146105ab578063db674a54146105b3578063dbe8097c146105c6578063eff0f592146105e6575f5ffd5b8063aa3aa460116100d9578063aa3aa460146104ae578063be023345146104b6578063d11fc656146104c9578063d2b4678b1461058c575f5ffd5b8063861a1412146104345780638c5dd8541461045b578063a1061de214610488578063a89cc8b81461049b575f5ffd5b80634f6578dc1161017f57806373b45a271161014f57806373b45a27146103aa57806374e9be14146103bd5780637d89122d146103d057806384ad6682146103e3575f5ffd5b80634f6578dc1461032457806359568da91461032c5780635c4623dc1461034f5780635fd09d0914610370575f5ffd5b8063231279cc116101ba578063231279cc14610272578063256486cb14610285578063278f3adf146102c257806336c9cd16146102fc575f5ffd5b806304f3bcec146101e05780630b95810c146102245780631703a01814610239575b5f5ffd5b6102077f000000000000000000000000000000000000000000000000000000000000000081565b6040516001600160a01b0390911681526020015b60405180910390f35b6102376102323660046122c8565b6106df565b005b6102607f000000000000000000000000000000000000000000000000000000000000000081565b60405160ff909116815260200161021b565b6102376102803660046122f7565b6107f6565b6102b2610293366004612348565b600260209081525f928352604080842090915290825290205460ff1681565b604051901515815260200161021b565b6102e76102d03660046122c8565b60096020525f908152604090205463ffffffff1681565b60405163ffffffff909116815260200161021b565b61020761030a3660046122c8565b5f602081905290815260409020546001600160a01b031681565b6102e7601f81565b61033f61033a366004612369565b610a75565b60405161021b94939291906123aa565b61036261035d3660046122c8565b610b72565b60405190815260200161021b565b6103977f000000000000000000000000000000000000000000000000000000000000000081565b60405161ffff909116815260200161021b565b6102376103b8366004612442565b610c04565b6102376103cb3660046122c8565b610d67565b6102376103de366004612462565b610f5e565b61041c6103f1366004612494565b600560209081525f93845260408085208252928452828420905282529020546001600160401b031681565b6040516001600160401b03909116815260200161021b565b61041c7f000000000000000000000000000000000000000000000000000000000000000081565b6102b2610469366004612348565b600860209081525f928352604080842090915290825290205460ff1681565b6102376104963660046124cd565b6110d3565b6103626104a9366004612500565b6112a4565b610397600181565b6102376104c4366004612562565b611661565b6105396104d73660046122c8565b60066020525f908152604090208054600182015460029092015490916001600160401b0381169160ff600160401b8304169163ffffffff600160481b8204811692600160681b8304821692600160881b8104831692600160a81b909104169088565b604080519889526001600160401b0390971660208901529415159587019590955263ffffffff92831660608701529082166080860152811660a085015290911660c083015260e08201526101000161021b565b61036261059a3660046122c8565b60046020525f908152604090205481565b610260600881565b6103626105c13660046125ac565b611834565b6105d96105d43660046122c8565b611871565b60405161021b91906125d4565b61066d6105f43660046122c8565b60076020525f90815260409020805460018201546002830154600384015460049094015460ff84169463ffffffff6101008604811695600160281b9004169392916001600160401b0380831692600160401b8104821692600160801b8204831692600160c01b909204909116906001600160a01b03168a565b60405161021b9a99989796959493929190612633565b6102e7615dc081565b61036261069a3660046126dd565b6118da565b6102b26106ad366004612442565b600360209081525f928352604080842090915290825290205460ff1681565b6102376106da366004612706565b61191b565b5f8181526007602052604090206001815460ff1660048111156107045761070461261f565b1461072257604051636f20b45d60e11b815260040160405180910390fd5b6001810154815460028301545f92839261076f9263ffffffff6101008304811692600160281b90041690600690869061075d908690866118da565b81526020019081526020015f20611a21565b91509150808015610790575060038301546001600160401b03808416911611155b156107ae57604051630a63e12d60e41b815260040160405180910390fd5b825460ff191660041783556040516001815284907f51806a6306edff2312e463359cb3754f8694b1778f9d1cc19e12b00282967361906020015b60405180910390a250505050565b6108038260200135611ab4565b5f60065f61081a85602001358660400135866118da565b815260208101919091526040015f20805490915061084b57604051635b07c98960e01b815260040160405180910390fd5b6001810154600160401b900460ff16156108785760405163a89ac15160e01b815260040160405180910390fd5b805461089161088c3686900386018661278a565b611b16565b146108af57604051635054097b60e01b815260040160405180910390fd5b6108b98383611b45565b60018101805468ff00000000000000001916600160401b1790556108e36080840160608501612831565b60018201805463ffffffff92909216600160481b026cffffffff0000000000000000001990921691909117905561092060a0840160808501612831565b60018201805463ffffffff92909216600160681b0263ffffffff60681b1990921691909117905561095760c0840160a08501612831565b60018201805463ffffffff92909216600160881b0263ffffffff60881b1990921691909117905561098e60e0840160c08501612831565b60018201805463ffffffff92909216600160a81b0263ffffffff60a81b1990921691909117905560e08301356002820155604083013560208401357fae6f13ff910bd1dd8dd2259898171f5d0ffff0d7a5ab695450cbb826bef30ffc846109fb6080880160608901612831565b610a0b60a0890160808a01612831565b610a1b60c08a0160a08b01612831565b610a2b60e08b0160c08c01612831565b6040805163ffffffff968716815294861660208601529285169284019290925283166060830152909116608082015260e087013560a082015260c0015b60405180910390a3505050565b6040805160c0810182525f80825260208201819052918101829052606081018290526080810182905260a08101919091525f5f5f8663ffffffff168663ffffffff161080610ae05750601f610ad363ffffffff898116908916612865565b610ade906001612878565b115b15610afe576040516302e8f35960e31b815260040160405180910390fd5b5f60065f610b0d8b898c6118da565b81526020019081526020015f209050610b27898989611cdd565b6001820154909550600160401b900460ff1691508115610b6657610b608186610b508b8b61288b565b610b5b9060016128a7565b6120c3565b90945092505b50945094509450949050565b5f610b7d3383611834565b5f818152602081905260409020549091506001600160a01b031615610bb557604051636ad7e97560e01b815260040160405180910390fd5b5f8181526020819052604080822080546001600160a01b031916339081179091559051909183917e0f640352a656c823ae8f9349a3d7aa45ff6975358436173f5f0c145d9e26eb9190a3919050565b5f82815260076020526040812090815460ff166004811115610c2857610c2861261f565b03610c465760405163643fc21360e11b815260040160405180910390fd5b60018101545f90815260026020908152604080832033845290915290205460ff16610c845760405163937dccc760e01b815260040160405180910390fd5b6001815460ff166004811115610c9c57610c9c61261f565b14610cba57604051636f20b45d60e11b815260040160405180910390fd5b5f83815260086020908152604080832033845290915290205460ff1615610cf45760405163f705318960e01b815260040160405180910390fd5b5f8381526008602090815260408083203380855290835292819020805460ff1990811660011790915584541660021784556004840180546001600160a01b031916841790555184815285917f336baad49ef41ea77eaa1e993257bb4be1a06927d4bdfc4d7245ee5ba578fc129101610a68565b5f81815260076020526040812090815460ff166004811115610d8b57610d8b61261f565b03610da95760405163643fc21360e11b815260040160405180910390fd5b60018101545f908152602081905260409020546001600160a01b03163314610de4576040516322bd839960e21b815260040160405180910390fd5b6001815460ff166004811115610dfc57610dfc61261f565b14610e1a57604051636f20b45d60e11b815260040160405180910390fd5b6003810154610e5c906001600160401b037f0000000000000000000000000000000000000000000000000000000000000000811691600160801b900416612878565b421015610e7c5760405163fa7bc54760e01b815260040160405180910390fd5b6001810154815460028301545f928392610eb79263ffffffff6101008304811692600160281b90041690600690869061075d908690866118da565b91509150801580610ed7575060038301546001600160401b038084169116115b15610ef557604051635d4ad9a960e01b815260040160405180910390fd5b8254600360ff1990911681178455830180546001600160401b03428116600160c01b026001600160c01b0383168117909355604051928116911617815284907f839fee4bb99f53743ed18db6fd4d52a2d09767ad7091634c1d2c449392b4a110906020016107e8565b336001600160a01b037f00000000000000000000000000000000000000000000000000000000000000001614610fa757604051635d154fe160e11b815260040160405180910390fd5b5f8281526007602052604090206002815460ff166004811115610fcc57610fcc61261f565b14610fea57604051636f20b45d60e11b815260040160405180910390fd5b811561106d57805460ff191660041781556040516001815283907fbf0625141f8955c67e8538833525be4a25b700bc19e4f2ddc96d3a4cce4330889060200160405180910390a26040516002815283907f51806a6306edff2312e463359cb3754f8694b1778f9d1cc19e12b00282967361906020015b60405180910390a2505050565b805460ff191660011781556003810180546001600160401b034216600160801b0267ffffffffffffffff60801b199091161790556040515f815283907fbf0625141f8955c67e8538833525be4a25b700bc19e4f2ddc96d3a4cce43308890602001611060565b6110dc83611ab4565b6001600160a01b0382166111035760405163d92e233d60e01b815260040160405180910390fd5b8061112157604051632f62e27560e01b815260040160405180910390fd5b5f8381526002602090815260408083206001600160a01b038616845290915290205460ff161561116457604051630ea075bf60e21b815260040160405180910390fd5b5f83815260036020908152604080832084845290915290205460ff161561119e57604051632585fb0d60e01b815260040160405180910390fd5b5f838152600160205260409020546008116111cc57604051637d2145ad60e01b815260040160405180910390fd5b5f8381526002602090815260408083206001600160a01b0386168085529083528184208054600160ff1991821681179092558886526003855283862087875285528386208054909116821790558251808501899052808401839052835180820385018152606082018086528151918701919091208752600486528487208890558987528286529386208054928301815586529390942090930180546001600160a01b0319168417905583905284907fbbda9d1b65616a6ef890ddef907ce6c3051ff14ea1dceeb1f38e71bbda5b1d3c90608001610a68565b5f6112ae86611ab4565b816001600160401b03165f036112d757604051631f2a200560e01b815260040160405180910390fd5b8463ffffffff168463ffffffff161015611304576040516302e8f35960e31b815260040160405180910390fd5b601f61131963ffffffff878116908716612865565b611324906001612878565b11156113435760405163151e4c1960e21b815260040160405180910390fd5b6201518061135863ffffffff86166001612878565b61136291906128c3565b42101561138257604051630224d35d60e51b815260040160405180910390fd5b5f60065f61139189878a6118da565b81526020019081526020015f2090508060010160089054906101000a900460ff166113cf5760405163d0212f2560e01b815260040160405180910390fd5b6040805160208082018a905263ffffffff808a16838501528816606083015260808083018890528351808403909101815260a0909201909252805191012091505f5f8381526007602052604090205460ff1660048111156114325761143261261f565b1461145057604051632d93e42160e21b815260040160405180910390fd5b6040805160208082018a9052818301879052825180830384018152606090920183528151918101919091205f81815260099092529190205463ffffffff90811690881610156114b25760405163795ab36960e01b815260040160405180910390fd5b5f5f6114c08a8a8a87611a21565b91509150806114e25760405163cc3fe45760e01b815260040160405180910390fd5b816001600160401b0316866001600160401b0316111561151557604051631bfc306360e21b815260040160405180910390fd5b6115208860016128a7565b5f848152600960209081526040808320805463ffffffff191663ffffffff959095169490941790935587825260079052208054600190829060ff191682800217905550805468ffffffffffffffff00191661010063ffffffff8c811691820268ffffffff0000000000191692909217600160281b928c16928302178355600183018d9055600283018a90556003830180546001600160401b038b81166fffffffffffffffffffffffffffffffff199092168217600160401b4283169081029190911767ffffffffffffffff60801b1916600160801b91909102179092556040805193845260208401949094529282018b9052606082019290925290841660808201528b9087907fdeea56bcedbb0606c1a2324aca9d86df20ce0764bea60361904a3d45d25a690b9060a00160405180910390a3505050505095945050505050565b5f848152602081905260409020546001600160a01b031661169557604051630ca5831d60e41b815260040160405180910390fd5b5f84815260026020908152604080832033845290915290205460ff166116ce5760405163937dccc760e01b815260040160405180910390fd5b6116db62015180426128da565b8363ffffffff161115611701576040516348c1b4df60e11b815260040160405180910390fd5b62ffffff63ffffffff82161180611720575063ffffffff811983161615155b1561173e5760405163bf3cad0b60e01b815260040160405180910390fd5b5f84815260056020908152604080832063ffffffff8716845282528083203384529091529020546001600160401b03161561178c57604051631eff1aa360e01b815260040160405180910390fd5b5f84815260056020908152604080832063ffffffff8781168086529184528285203380875290855294839020805466ffffffff000000601889901b168984169081176001603f1b176001600160401b031667ffffffffffffffff19909216919091179091558351908152908616938101939093529187917f4534562013cfb3945585e9a164820e44c8eefd57874f1fda999d1b7957d4d530910160405180910390a450505050565b604080516001600160a01b03841660208201529081018290525f906060016040516020818303038152906040528051906020012090505b92915050565b5f818152600160209081526040918290208054835181840281018401909452808452606093928301828280156118ce57602002820191905f5260205f20905b81546001600160a01b031681526001909101906020018083116118b0575b50505050509050919050565b604080516020810185905290810183905263ffffffff821660608201525f906080016040516020818303038152906040528051906020012090509392505050565b61192484611ab4565b80611942576040516351bda03d60e01b815260040160405180910390fd5b61194c4283612194565b61196957604051633f59ad3d60e21b815260040160405180910390fd5b5f60065f6119788787876118da565b815260208101919091526040015f208054909150156119aa5760405163473af27b60e11b815260040160405180910390fd5b81815560018101805467ffffffffffffffff1916426001600160401b03169081179091556040805163ffffffff861681526020810185905290810191909152849086907f18103ce7ddb92a3f105bb60c98fd452fe0b20da0984f77ec9f8b8dacfa5bf85c9060600160405180910390a35050505050565b5f5f5f611a2f878787611cdd565b90505f81604001518260200151835f0151611a4a91906128a7565b611a5491906128a7565b63ffffffff16118015611a9557507f000000000000000000000000000000000000000000000000000000000000000061ffff168160a0015163ffffffff1610155b9150611aa68482610b50898961288b565b509791965090945050505050565b5f818152602081905260409020546001600160a01b031680611ae957604051630ca5831d60e41b815260040160405180910390fd5b6001600160a01b0381163314611b12576040516322bd839960e21b815260040160405180910390fd5b5050565b5f81604051602001611b2891906128f9565b604051602081830303815290604052805190602001209050919050565b6001611b5460208401846129a2565b61ffff1614611b7e57604051637b859cf560e01b8152600160048201526024015b60405180910390fd5b611b8e6080830160608401612831565b63ffffffff16611ba460a0840160808501612831565b63ffffffff161015611bcc57604051637b859cf560e01b815260026004820152602401611b75565b611bdc60e0830160c08401612831565b63ffffffff16611bf260c0840160a08501612831565b63ffffffff161115611c1a57604051637b859cf560e01b815260036004820152602401611b75565b615dc0611c2d60e0840160c08501612831565b63ffffffff161115611c5457604051637b859cf560e01b8152600481810152602401611b75565b60e0820135611c7957604051637b859cf560e01b815260056004820152602401611b75565b610120820135611c9f57604051637b859cf560e01b815260066004820152602401611b75565b63ffffffff8116611cb660a0840160808501612831565b63ffffffff1610611b1257604051637b859cf560e01b815260076004820152602401611b75565b6040805160c0810182525f80825260208201819052918101829052606081018290526080810182905260a08101919091525f84815260016020526040812080549091816001600160401b03811115611d3757611d37612730565b604051908082528060200260200182016040528015611d60578160200160208202803683370190505b5090505f826001600160401b03811115611d7c57611d7c612730565b604051908082528060200260200182016040528015611da5578160200160208202803683370190505b509050865b8663ffffffff168163ffffffff1611612042575f805b85811015611f2a575f8b815260056020908152604080832063ffffffff871684529091528120885482908a9085908110611dfc57611dfc6129bb565b5f9182526020808320909101546001600160a01b031683528201929092526040019020546001600160401b03811691506001603f1b1615611ec65762ffffff63ffffffff168116868381518110611e5557611e556129bb565b63ffffffff909216602092830291909101909101528451601882901c62ffffff1690869084908110611e8957611e896129bb565b602002602001019063ffffffff16908163ffffffff1681525050858281518110611eb557611eb56129bb565b602002602001015183179250611f21565b5f868381518110611ed957611ed96129bb565b602002602001019063ffffffff16908163ffffffff16815250505f858381518110611f0657611f066129bb565b602002602001019063ffffffff16908163ffffffff16815250505b50600101611dc0565b505f611f56857f00000000000000000000000000000000000000000000000000000000000000006121c4565b90505f611f83857f00000000000000000000000000000000000000000000000000000000000000006121c4565b905062ffffff8319821681169083198584161616611fa084612290565b8b518c90611faf9083906128a7565b63ffffffff16905250611fc182612290565b8b602001818151611fd291906128a7565b63ffffffff16905250611fe481612290565b8b604001818151611ff591906128a7565b63ffffffff1690525061200d831962ffffff16612290565b8b60600181815161201e91906128a7565b63ffffffff1690525085945061203a93508492506129cf915050565b915050611daa565b5061204d878761288b565b6120589060016128a7565b6120639060186129f3565b63ffffffff166080860181905260408601516020870151875161208691906128a7565b61209091906128a7565b6120a29063ffffffff166103e86128c3565b6120ac91906128da565b63ffffffff1660a086015250929695505050505050565b60018301545f90819081906120e89063ffffffff80871691600160881b9004166128c3565b60018701549091505f9061210c9063ffffffff80881691600160a81b9004166128c3565b90505f866020015163ffffffff16876080015163ffffffff1661212f9190612865565b61213b906103e86128c3565b87519091505f906121549063ffffffff166103e86128c3565b9050818411612163575f61216d565b61216d8285612865565b955080831161217c575f612186565b6121868184612865565b945050505050935093915050565b5f6121a86201518063ffffffff8416612a12565b6001600160401b0316836001600160401b031610905092915050565b5f5f8260ff16116122025760405162461bcd60e51b8152602060048201526008602482015267071756f72756d3d360c41b6044820152606401611b75565b5f5b60188160ff161015612289575f805b8551811015612268578260ff16868281518110612232576122326129bb565b602002602001015163ffffffff16901c60011663ffffffff16600103612260578161225c81612a34565b9250505b600101612213565b508360ff16811061228057600160ff83161b92909217915b50600101612204565b5092915050565b5f62ffffff82165b63ffffffff8116156122c2576122af60018261288b565b16816122ba816129cf565b925050612298565b50919050565b5f602082840312156122d8575f5ffd5b5035919050565b803563ffffffff811681146122f2575f5ffd5b919050565b5f5f82840361016081121561230a575f5ffd5b610140811215612318575f5ffd5b5082915061232961014084016122df565b90509250929050565b80356001600160a01b03811681146122f2575f5ffd5b5f5f60408385031215612359575f5ffd5b8235915061232960208401612332565b5f5f5f5f6080858703121561237c575f5ffd5b8435935061238c602086016122df565b925061239a604086016122df565b9396929550929360600135925050565b5f6101208201905063ffffffff865116825263ffffffff602087015116602083015263ffffffff604087015116604083015263ffffffff606087015116606083015263ffffffff608087015116608083015263ffffffff60a08701511660a083015261242160c08301866001600160401b03169052565b6001600160401b03841660e083015282151561010083015295945050505050565b5f5f60408385031215612453575f5ffd5b50508035926020909101359150565b5f5f60408385031215612473575f5ffd5b8235915060208301358015158114612489575f5ffd5b809150509250929050565b5f5f5f606084860312156124a6575f5ffd5b833592506124b6602085016122df565b91506124c460408501612332565b90509250925092565b5f5f5f606084860312156124df575f5ffd5b833592506124ef60208501612332565b929592945050506040919091013590565b5f5f5f5f5f60a08688031215612514575f5ffd5b85359450612524602087016122df565b9350612532604087016122df565b92506060860135915060808601356001600160401b0381168114612554575f5ffd5b809150509295509295909350565b5f5f5f5f60808587031215612575575f5ffd5b84359350612585602086016122df565b9250612593604086016122df565b91506125a1606086016122df565b905092959194509250565b5f5f604083850312156125bd575f5ffd5b6125c683612332565b946020939093013593505050565b602080825282518282018190525f918401906040840190835b818110156126145783516001600160a01b03168352602093840193909201916001016125ed565b509095945050505050565b634e487b7160e01b5f52602160045260245ffd5b610140810160058c1061265457634e487b7160e01b5f52602160045260245ffd5b8b825263ffffffff8b16602083015263ffffffff8a16604083015288606083015287608083015261269060a08301886001600160401b03169052565b6001600160401b03861660c08301526001600160401b03851660e08301526001600160401b0384166101008301526001600160a01b0383166101208301529b9a5050505050505050505050565b5f5f5f606084860312156126ef575f5ffd5b83359250602084013591506124c4604085016122df565b5f5f5f5f60808587031215612719575f5ffd5b843593506020850135925061239a604086016122df565b634e487b7160e01b5f52604160045260245ffd5b60405161014081016001600160401b038111828210171561277357634e487b7160e01b5f52604160045260245ffd5b60405290565b803561ffff811681146122f2575f5ffd5b5f61014082840312801561279c575f5ffd5b506127a5612744565b6127ae83612779565b815260208381013590820152604080840135908201526127d0606084016122df565b60608201526127e1608084016122df565b60808201526127f260a084016122df565b60a082015261280360c084016122df565b60c082015260e083810135908201526101008084013590820152610120928301359281019290925250919050565b5f60208284031215612841575f5ffd5b61284a826122df565b9392505050565b634e487b7160e01b5f52601160045260245ffd5b8181038181111561186b5761186b612851565b8082018082111561186b5761186b612851565b63ffffffff828116828216039081111561186b5761186b612851565b63ffffffff818116838216019081111561186b5761186b612851565b808202811582820484141761186b5761186b612851565b5f826128f457634e487b7160e01b5f52601260045260245ffd5b500490565b815161ffff168152610140810160208301516020830152604083015160408301526060830151612931606084018263ffffffff169052565b506080830151612949608084018263ffffffff169052565b5060a083015161296160a084018263ffffffff169052565b5060c083015161297960c084018263ffffffff169052565b5060e083015160e083015261010083015161010083015261012083015161012083015292915050565b5f602082840312156129b2575f5ffd5b61284a82612779565b634e487b7160e01b5f52603260045260245ffd5b5f63ffffffff821663ffffffff81036129ea576129ea612851565b60010192915050565b63ffffffff818116838216029081169081811461228957612289612851565b6001600160401b03818116838216029081169081811461228957612289612851565b5f60018201612a4557612a45612851565b506001019056fea2646970667358221220455abf64f966578bdba23b9d6cb673da7ed1e7a7318bc431624be7ce3692006064736f6c634300081c0033",
+  "deployedBytecodeBytes": 10882
+}

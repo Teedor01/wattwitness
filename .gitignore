@@ -1,0 +1,17 @@
+node_modules/
+dist/
+*.log
+.env
+.env
+build/mutation-state.json
+deployments/*.secrets.json
+
+# audio: recordings may contain speech or other personal sound. Never commit them.
+data/clips/**/*.wav
+data/clips/**/*.WAV
+models/*.local.json
+
+dist/
+build/mutation-state.json
+build/mutation-pwa-state.json
+build/mutation-backup.json

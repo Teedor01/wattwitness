@@ -1,16 +1,8 @@
-import { readFileSync } from "node:fs";
-import { createRequire } from "node:module";
-import { fileURLToPath } from "node:url";
-import path from "node:path";
 import { createVM } from "@ethereumjs/vm";
 import { Common, Mainnet } from "@ethereumjs/common";
 import { createAddressFromString, hexToBytes, bytesToHex } from "@ethereumjs/util";
 import { Interface } from "ethers";
-
-const require = createRequire(import.meta.url);
-const solc = require("solc");
-const here = path.dirname(fileURLToPath(import.meta.url));
-const SOURCE_PATH = path.resolve(here, "../../contracts/CoreCompat.sol");
+import { compile } from "./chain";
 
 export interface CompiledCompat {
   abi: unknown[];
@@ -19,22 +11,7 @@ export interface CompiledCompat {
 }
 
 export function compileCompat(): CompiledCompat {
-  const input = {
-    language: "Solidity",
-    sources: { "CoreCompat.sol": { content: readFileSync(SOURCE_PATH, "utf8") } },
-    settings: {
-      evmVersion: "cancun",
-      optimizer: { enabled: true, runs: 200 },
-      outputSelection: { "*": { "*": ["abi", "evm.bytecode.object"] } },
-    },
-  };
-  const out = JSON.parse(solc.compile(JSON.stringify(input)));
-  const errors = (out.errors ?? []).filter((e: { severity: string }) => e.severity === "error");
-  if (errors.length > 0) {
-    throw new Error("Solidity compile failed:\n" + errors.map((e: { formattedMessage: string }) => e.formattedMessage).join("\n"));
-  }
-  const c = out.contracts["CoreCompat.sol"]["CoreCompat"];
-  return { abi: c.abi, bytecode: "0x" + c.evm.bytecode.object, solcVersion: solc.version() };
+  return compile("CoreCompat.sol", "CoreCompat");
 }
 
 export interface CompatEvm {

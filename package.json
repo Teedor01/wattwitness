@@ -1,0 +1,53 @@
+{
+  "name": "wattwitness-core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "WattWitness Phase 1: deterministic evidence core (no network, no LLM)",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.sw.json",
+    "test": "vitest run",
+    "test:core": "vitest run test/core",
+    "test:compat": "vitest run test/compat",
+    "vectors": "tsx scripts/gen-vectors.ts",
+    "check": "npm run typecheck && npm test",
+    "build:contracts": "tsx scripts/build-contracts.ts",
+    "mutate": "tsx scripts/mutate.ts",
+    "gas": "tsx scripts/gas-report.ts",
+    "live": "node --env-file=.env --import tsx scripts/live.ts",
+    "test:contract": "vitest run test/contract",
+    "audio:eval": "tsx scripts/audio-eval.ts",
+    "audio:train": "tsx scripts/audio-train.ts",
+    "audio:demo": "tsx scripts/audio-demo.ts",
+    "test:sensing": "vitest run test/sensing",
+    "mutate:src": "tsx scripts/mutate-src.ts",
+    "pwa:build": "tsx scripts/build-pwa.ts",
+    "pwa:build:test": "tsx scripts/build-pwa.ts --test",
+    "pwa:serve": "tsx scripts/serve-pwa.ts",
+    "mutate:pwa": "tsx scripts/mutate-pwa.ts",
+    "test:pwa": "vitest run test/pwa",
+    "test:browser": "vitest run -c vitest.browser.config.ts",
+    "check:all": "npm run typecheck && npm test && npm run test:browser"
+  },
+  "dependencies": {
+    "ethers": "6.17.0"
+  },
+  "devDependencies": {
+    "@ethereumjs/block": "^10.1.3",
+    "@ethereumjs/common": "10.1.3",
+    "@ethereumjs/evm": "10.1.3",
+    "@ethereumjs/util": "10.1.3",
+    "@ethereumjs/vm": "10.1.3",
+    "@sparticuz/chromium": "^153.0.0",
+    "@types/node": "22.20.5",
+    "esbuild": "^0.28.2",
+    "puppeteer-core": "^25.14.0",
+    "solc": "0.8.28",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "vitest": "5.0.4"
+  },
+  "engines": {
+    "node": ">=22.12"
+  }
+}
