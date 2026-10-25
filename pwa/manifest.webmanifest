@@ -1,0 +1,11 @@
+{
+  "name": "WattWitness",
+  "short_name": "WattWitness",
+  "description": "Offline-first generator evidence observer (prototype).",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#f6f4ee",
+  "theme_color": "#0b3d2e",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
