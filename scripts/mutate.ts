@@ -39,7 +39,6 @@ const MUTANTS: Mutant[] = [
     "if (sites[c.siteId].owner != msg.sender) revert NotSiteOwner();\n        if (c.state != ClaimState.ELIGIBLE) revert WrongState();",
     "if (sites[c.siteId].owner != msg.sender) revert NotSiteOwner();\n        if (c.state != ClaimState.ELIGIBLE && c.state != ClaimState.FINALIZED) revert WrongState();",
   ),
-
   {
     id: "M2x",
     title: "duplicate claim key AND overlap watermark both removed (defence in depth is real)",
@@ -99,7 +98,7 @@ let state: Record<string, Result> = {};
 try {
   state = JSON.parse(readFileSync(statePath, "utf8"));
 } catch {
-  
+  /* first run */
 }
 const say = (s: string): void => console.log(s);
 
@@ -152,7 +151,7 @@ for (const mu of selected) {
   writeFileSync(statePath, JSON.stringify(state, null, 2));
 }
 
-
+// ---- report over everything recorded so far
 const report: string[] = [];
 let caught = 0;
 for (const mu of MUTANTS) {
